@@ -13,11 +13,12 @@ sealed class Screen(val title: String, val route: String ) {
          object Subscription: DrawerScreen(
              dTilte = "Subscription",
              dRoute = "subscribe",
-             R.drawable.ic_subacribe
+             R.drawable.ic_subscribe
          )
         object AddAccount: DrawerScreen(
             dTilte = "Add Account",
             dRoute = "add_account",
-            R.drawable.ic_baseline_person_add_alt_1_24
+            R.drawable.baseline_person_add_alt_1_24
+        )
         }
 }
