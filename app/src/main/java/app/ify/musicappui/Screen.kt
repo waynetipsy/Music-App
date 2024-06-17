@@ -3,6 +3,10 @@ package app.ify.musicappui
 import androidx.annotation.DrawableRes
 
 sealed class Screen(val title: String, val route: String ) {
+
+    sealed class BottomScreen(
+        val bTitle: String, val bRoute: String, @DrawableRes val icon: Int
+    ):Screen(bTitle)
     sealed class DrawerScreen(val dTilte: String, val dRoute: String, @DrawableRes val icon: Int)
         : Screen(dTilte, dRoute) {
             object Account: DrawerScreen(
@@ -22,3 +26,8 @@ sealed class Screen(val title: String, val route: String ) {
         )
         }
 }
+    val screensInDrawer = listOf(
+        Screen.DrawerScreen.Account,
+        Screen.DrawerScreen.Subscription,
+        Screen.DrawerScreen.AddAccount
+    )
