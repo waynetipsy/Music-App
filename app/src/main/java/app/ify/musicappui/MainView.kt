@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -46,31 +49,47 @@ fun MainView () {
 
 
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    val scope : CoroutineScope = rememberCoroutineScope()
+    val scope: CoroutineScope = rememberCoroutineScope()
     val viewModel: MainViewModel = viewModel()
     //Allow us to find out on which "View" we currently are
-    val controller : NavController = rememberNavController()
+    val controller: NavController = rememberNavController()
     val navBackStackEntry by controller.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val dialogOpen = remember{
+    val dialogOpen = remember {
         mutableStateOf(false)
     }
     val currentScreen = remember {
         viewModel.currentScreen.value
     }
 
-    val title = remember{
+    val title = remember {
         // TODO change that to currentScreen.title
         mutableStateOf(currentScreen.title)
     }
 
-    val bottomBar : @Composable () -> Unit = {
-       if (currentScreen is Screen.DrawerScreen || currentScreen == Screen.)
+    val bottomBar: @Composable () -> Unit = {
+        if (currentScreen is Screen.DrawerScreen || currentScreen == Screen.BottomScreen.Home){
+            BottomNavigation(Modifier.wrapContentSize()){
+                screensInBottom.forEach { 
+                    item ->
+                    BottomNavigationItem(selected = currentRoute == item.bRoute,
+                        onClick = { controller.navigate(item.bRoute) },
+                        icon = {
+                            Icon(contentDescription = item.bTitle, painter =  painterResource(id = item.icon))
+                        },
+                        label = { Text(text = item.bTitle)}
+                        , selectedContentColor = Color.White,
+                        unselectedContentColor = Color.Black
+                    )
+                }
+
+            }
+        }
     }
 
     Scaffold (
-        bottomBar = {},
+        bottomBar = bottomBar,
       topBar = {
        TopAppBar(title = { Text(title.value)},
          navigationIcon = { IconButton(onClick = {
@@ -143,6 +162,13 @@ fun MainView () {
      NavHost(navController as NavHostController,
          startDestination = Screen.DrawerScreen.AddAccount.route,
          modifier = Modifier.padding(pd)){
+
+
+         composable(Screen.BottomScreen.Home.bRoute) {
+             // TODO Add HOME SCREEN
+         }
+
+         composable(Screen.BottomScreen.Browse.bRoute)
 
          composable(Screen.DrawerScreen.Account.route) {
             AccountView()
